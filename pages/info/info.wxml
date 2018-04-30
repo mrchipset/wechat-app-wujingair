@@ -1,0 +1,26 @@
+<!--pages/info/info.wxml-->
+<view class="bgcover" style="height:{{windowSize[0]}}px;">
+  
+  <view class="basic-info" style="height:10%;">
+    <image class="weather-icon" src="../../src/weather-icon/{{weatherIcon}}.png" mode="widthFix"></image>
+    <view class="loc-label">{{airData.Loc}}</view>
+  </view>
+
+  <view class="basic-info" style="height:10%;border-bottom:#000 1px solid;">
+    <view class="temhum-label">
+      <image class="temhum-logo" src="../../src/button-icon/Tem-icon.png" mode="widthFix"></image>
+      <text>{{airData.Tem}}℃</text>
+    </view>
+    <view class="temhum-label">
+      <image class="temhum-logo" src="../../src/button-icon/Hum-icon.png" mode="widthFix"></image>
+      <text>{{airData.Hum}}</text>
+    </view>
+  </view>
+
+  <image class="guide-arrow" style="width:{{windowSize[0]*0.025/261*1000}}px;visibility:{{current!=0 ? 'visible' : 'hidden'}};" src="../../src/button-icon/ToUpper.png" mode="widthFix" bindtap="lastPage"></image>
+
+  <canvas class="data-chart" style="height:66%;" id="canvas" canvas-id="canvas" disable-scroll="true" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"/>
+  
+  <image class="guide-arrow" style="width:{{windowSize[0]*0.025/261*1000}}px;visibility:{{current!=2 ? 'visible' : 'hidden'}};" src="../../src/button-icon/ToLower.png" mode="widthFix" bindtap="nextPage"></image>
+
+</view>

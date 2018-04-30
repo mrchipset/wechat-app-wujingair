@@ -1,0 +1,30 @@
+<!--pages/menu/menu.wxml-->
+<view class="bgcover bg-{{bgClass}}" style="height:{{windowSize[0]}}px;">
+  
+  <swiper style="height:{{windowSize[0]*0.35}}px;" current="{{current}}" bindchange="onSwiperChanged">
+    <block wx:for="{{airData}}" wx:key="unique">
+      <swiper-item>
+        <view class="swiper-box">
+          <view class="Loc-label">
+            <image class="Loc-label Loc-icon" src="../../src/button-icon/Location.png" mode="aspectFill"></image>
+            <view class="Loc-label Loc-value">{{item.Loc}}</view>
+          </view>
+          <view class="AQI-label">AQI 指数</view>
+          <view class="AQI-label AQI-value {{item.AQI>250?'higherAQI':''}} {{item.AQI>150&&item.AQI<=250?'highAQI':''}}">{{item.AQI}}</view>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+
+  <canvas class="data-bar" style="height:{{windowSize[0]*0.5}}px;" id="dataBar" canvas-id="dataBar" disable-scroll="true" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"/>
+  
+  <swiper style="height:{{windowSize[0]*0.15}}px;" current="{{current}}" indicator-dots="true" bindchange="onSwiperChanged">
+    <block wx:for="{{airData}}" wx:key="unique">
+      <swiper-item>
+      </swiper-item>
+    </block>
+  </swiper>
+
+</view>
+
+<image src="../../src/button-icon/Setting.png" mode="widthFix" class="setting-btn ripple infinite rotateCircle" bindtap="openSettings"></image>

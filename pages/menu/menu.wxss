@@ -1,0 +1,145 @@
+/* pages/menu/menu.wxss */
+@import "../../ripples.wxss";
+
+.bgcover {
+  display: block; 
+  height: 100%; 
+  width: 100%; 
+  overflow: hidden;
+} 
+.bg-SunnyDay {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SunnyDay.png');
+}
+.bg-RainyDay {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/RainyDay.png');
+}
+.bg-SnowyDay {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SnowyDay.png');
+}
+.bg-SunnyDusk {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SunnyDusk.png');
+}
+.bg-CloudyNight {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/CloudyNight.png');
+}
+.bg-grayboard {
+  width: 80%;
+  margin: 0 10%;
+  background-color: rgba(0,0,0,0.1);
+  filter: opacity(50);
+}
+
+@keyframes flash {
+  from, 50%, to {
+    color: #fff;
+  }
+  25%, 75% {
+    color: rgb(255,0,0);
+    opacity: 0.8;
+  }
+}
+.higherAQI {
+  animation-duration: 3s;
+	animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-name: flash;
+}
+.highAQI {
+  animation-duration: 5s;
+	animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-name: flash;
+}
+
+.swiper-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32rpx 0;
+}
+
+.Loc-label{
+  max-width: 75%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16rpx;
+}
+.Loc-label.Loc-icon {
+  src: url("../../src/Location.png");
+  width: 64rpx;
+  height: 64rpx;
+}
+.Loc-label.Loc-value {
+  width: 100%;
+  color: #fff;
+  font-size: 48rpx;
+  font-weight: lighter;
+  overflow : hidden;
+  
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
+}
+
+.AQI-label {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  font-size: 48rpx;
+}
+.AQI-label.AQI-value {
+  font-size: 128rpx;
+  font-weight: lighter;
+  margin-bottom: 16rpx;
+}
+
+.chart-box {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.tags-box {
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  color: #fff;
+  align-items: flex-start;
+}
+.tags-box.tag {
+  margin: 22rpx 0;
+}
+.data-bar {
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+
+.setting-btn{
+  width: 64rpx;
+  position: absolute;
+  right: 5%;
+  bottom: 32rpx;
+}
+.add-btn{
+  width: 64rpx;
+  position: absolute;
+  right: 5%;
+  bottom: 128rpx;
+}
