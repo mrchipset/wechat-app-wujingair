@@ -1,20 +1,19 @@
 <!--pages/settings/settings.wxml-->
-  <view style="height:{{windowSize[0]}}px;margin-left:10%;margin-right:10%;">
-    <view class='rowbox'>
-      <view class='label'>系统电源开关</view>
-      <switch class='switcher' checked='{{systemOn}}' bindchange='onSystemSwitchChanged'></switch>
-    </view>
-    <view class='rowbox'>
-      <view class='label'>自适应调节模式开关</view>
-      <switch class='switcher' checked='{{automodeOn}}' bindchange='onAutomodeSwitchChanged'></switch>
-    </view>
-    <view class='rowbox' style='flex-direction:column;visibility:{{automodeOn?"collapse":"visible"}}'>
-      <view class='label'>风速调节: {{windlevel}}%</view>
-      <slider value='{{windlevel}}' bindchange='onWindlevelChanged'></slider>
-    </view>
-    <view class='rowbox' style='flex-direction:column;visibility:{{automodeOn?"collapse":"visible"}}'>
-      <view class='label'>负氧离子调节: {{oxygenlevel}}%</view>
-      <slider value='{{oxygenlevel}}' bindchange='onOxygenlevelChanged'></slider>
-    </view>
+<view style="height:{{windowSize[0]}}px;margin-left:10%;margin-right:10%;">
+  <view class='rowbox'>
+    <view class='label'>系统电源开关</view>
+    <switch class='switcher' checked='{{systemOn}}' bindchange='onSystemSwitchChanged'></switch>
   </view>
-
+  <view class='rowbox'>
+    <view class='label'>自适应调节模式开关</view>
+    <switch class='switcher' checked='{{automodeOn}}' bindchange='onAutomodeSwitchChanged'></switch>
+  </view>
+  <view class='rowbox' style='flex-direction:column;visibility:{{automodeOn?"collapse":"visible"}}'>
+    <view class='label'>风速调节: {{windlevel}}%</view>
+    <slider value='{{windlevel}}' bindchange='onWindlevelChanged'></slider>
+  </view>
+  <view class='rowbox' style='flex-direction:column;visibility:{{automodeOn?"collapse":"visible"}}'>
+    <view class='label'>负氧离子调节: {{oxygenlevel}}%</view>
+    <slider value='{{oxygenlevel}}' bindchange='onOxygenlevelChanged'></slider>
+  </view>
+</view>

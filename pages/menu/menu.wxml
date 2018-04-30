@@ -27,4 +27,4 @@
 
 </view>
 
-<image src="../../src/button-icon/Setting.png" mode="widthFix" class="setting-btn" bindtap="openSettings"></image>
+<image src="../../src/button-icon/Setting.png" mode="widthFix" class="setting-btn ripple infinite rotateCircle" bindtap="openSettings"></image>

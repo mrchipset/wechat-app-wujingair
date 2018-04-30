@@ -7,35 +7,30 @@
   width: 100%; 
   overflow: hidden;
 } 
-.bg-one {
+.bg-SunnyDay {
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgb(32,158,133);
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SunnyDay.png');
 }
-.bg-two {
+.bg-RainyDay {
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgb(255,223,120);
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/RainyDay.png');
 }
-.bg-three {
+.bg-SnowyDay {
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgb(245,170,120);
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SnowyDay.png');
 }
-.bg-four {
+.bg-SunnyDusk {
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgb(253,91,120);
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SunnyDusk.png');
 }
-.bg-five {
+.bg-CloudyNight {
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgb(181,101,149);
-}
-.bg-six {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-color: rgb(101,83,140);
+  background-image: url('https://www.wujingair.com/fs/menu-bgimage/CloudyNight.png');
 }
 .bg-grayboard {
   width: 80%;

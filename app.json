@@ -1,32 +1,15 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/menu/menu",
     "pages/settings/settings",
-    "pages/info/info"
+    "pages/info/info",
+    "pages/add/add"
   ],
   "window": {
-    "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "悟静空气净化器",
-    "navigationBarTextStyle": "black",
-    "backgroundColor": "#eeeeee"
-  },
-  "tabBar": {
-    "color": "#898989",
-    "selectedColor": "#000000",
-    "list": [
-      {
-        "pagePath": "pages/menu/menu",
-        "text": "空气质量",
-        "iconPath": "src/button-icon/1.png",
-        "selectedIconPath": "src/button-icon/11.png"
-      },
-      {
-        "pagePath": "pages/settings/settings",
-        "text": "远程控制",
-        "iconPath": "src/button-icon/2.png",
-        "selectedIconPath": "src/button-icon/22.png"
-      }
-    ]
+    "navigationBarTextStyle": "black"
   }
 }
