@@ -8,7 +8,6 @@ Page({
     userInfo: {},
     windowSize: [],
     current: '',
-    airData:{},
     systemOn: false,
     automodeOn: false,
     windlevel: 50,
@@ -23,7 +22,6 @@ Page({
       userInfo: app.globalData.userInfo,
       current: options.current
     });
-    
   },
 
 

@@ -63,9 +63,9 @@ Page({
     current: 0
   },
 
-
   onLoad: function () {
     const that = this;
+    var airData = that.data.airData;
     that.setData({
       windowSize: app.globalData.windowSize,
       userInfo: app.globalData.userInfo
@@ -74,7 +74,7 @@ Page({
       that.setData({
         weatherData: res
       });
-      weatherUtil.getBgImage(that.data.weatherData, function (res) {
+     weatherUtil.getBgImage(airData[that.data.current].AQI, function (res) {
         that.setData({
           bgClass: res.bgImage
         });
@@ -84,6 +84,7 @@ Page({
         });
       });
     });
+  
 
     var airData = that.data.airData;
     var current = that.data.current;
@@ -180,23 +181,13 @@ Page({
     const current = that.data.current;
     wx.showActionSheet({
       itemList: [
-        '详细信息', '远程控制', '新增设备'
+        '详细信息'
       ],
       success: function(e){
         switch (e.tapIndex) {
           case 0:
             wx.navigateTo({
               url: '../info/info?airDataKey=' + current
-            });
-            break;
-          case 1:
-            wx.navigateTo({
-              url: '../settings/settings?airDataKey=' + current
-            });
-            break;
-          case 2:
-            wx.navigateTo({
-              url: '../add/add'
             });
             break;
         }
