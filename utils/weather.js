@@ -67,45 +67,46 @@ function printOut(callback){
     }
   }); 
 }
-
 //choose background image
-function getBgImage(weatherData, callback) {
-  const myDate = new Date();
-  const myHour = myDate.getHours();
-  if (myHour >= 5 && myHour < 17) {
-    if (weatherData.weather.indexOf("雨") != -1){
+function getBgImage(aqi, callback) {
+  if (aqi<=50) {
       callback({
-        bgImage: "RainyDay",
-        topColor: "#47899f"
+        bgImage: "one",
+        topColor: "#209E85"
       });
     }
-    else if (weatherData.weather.indexOf("雪") != -1){
+  else if (aqi>= 51 && aqi<= 100) {
       callback({
-        bgImage: "SnowyDay",
-        topColor: "#acd0dc"
+        bgImage: "two",
+        topColor: "#FFDF78"
       });
     }
-    else {
-      callback({
-        bgImage: "SunnyDay",
-        topColor: "#59d1f6"
-      });
-    }
-  }
-  else if (myHour >= 17 && myHour < 21) {
+  else if (aqi >= 101 && aqi <= 150) {
     callback({
-      bgImage: "SunnyDusk",
-      topColor: "#ff4c47"
+      bgImage: "three",
+      topColor: "#F5AA78"
+    });
+  }
+  else if (aqi >= 151 && aqi <= 200) {
+    callback({
+      bgImage: "four",
+      topColor: "#FD5B78"
+    });
+  }
+  else if (aqi >= 201 && aqi <= 300) {
+    callback({
+      bgImage: "five",
+      topColor: "#B56595"
     });
   }
   else {
     callback({
-      bgImage: "CloudyNight",
-      topColor: "#254375"
+      bgImage: "six",
+      topColor: "#65538C"
     });
   }
-}
-
+  }
+  
 //choose weather icon
 function getWeatherIcon(weatherData, callback) {
   var iconName = undefined;
