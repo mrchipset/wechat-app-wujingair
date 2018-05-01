@@ -1,58 +1,16 @@
 // pages/info/info.js
 const app = getApp();
 const weatherUtil = require('../../utils/weather.js');
-const chartUtil = require('../../utils/chart.js');
+var wxCharts = require('../../utils/wxcharts.js');
+var concentsChart = null;
+var dailyChangeChart = null;
+var weeklyChangeChart = null;
+var monthlyChangeChart = null;
+
 var touchDot = 0;
 var touchMove = 0;
 var touchTime = 0;
 var touchInterval = undefined;
-
-var airDatas = [
-  {
-    Did: '00001',
-    Dtype: 'Light-01',
-    State: 0,
-    AutoRun: {
-      on: undefined,
-      off: undefined
-    },
-    Users: undefined,
-    AQI: 50,
-    Tem: 23,
-    Hum: '20%',
-    Concent: [
-      {
-        tag: '甲醛',
-        value: 2
-      },
-      {
-        tag: 'PM1.0',
-        value: 31
-      },
-      {
-        tag: 'PM2.5',
-        value: 31
-      },
-      {
-        tag: 'PM10',
-        value: 45
-      },
-      {
-        tag: 'TVOC',
-        value: 34
-      },
-      {
-        tag: 'VOC',
-        value: 29
-      }
-    ],
-    Loc: '上海理工大学第二学生公寓',
-    History: {
-      daily: [20, 30, 45, 60, 50, 23, 62, 44, 90, 120, 65, 25, 88, 55, 14, 72, 80, 76, 40, 20, 15, 20, 36, 37],
-      weekly: [57, 68, 50, 44, 38, 36, 18]
-    }
-  }
-];
 
 Page({
   data: {
@@ -61,16 +19,20 @@ Page({
     weatherData: {},
     weatherIcon: 'Sunny',
     airData: {},
-    current: 0
+    current: 0,
+    chartTitle: '实时污染物浓度',
+    isMainChartDisplay: true
   },
 
 
-  onLoad: function (options) {
+  onLoad: function () {
     const that = this;
+    const airData = wx.getStorageSync('airData');
+    wx.removeStorageSync('airData');
     that.setData({
       windowSize: app.globalData.windowSize,
       userInfo: app.globalData.userInfo,
-      airData: airDatas[options.airDataKey]
+      airData: airData
     });
 
     weatherUtil.getWeather(function (res) {
@@ -87,9 +49,11 @@ Page({
 
 
   onReady: function () {
-    this.nextPage();
-    this.lastPage();
-    //this.onPageChanged();
+    const that = this;
+    const airData = that.data.airData;
+    //that.nextPage();
+    //that.lastPage();
+    that.onPageChanged();
   },
 
   touchStart: function (e) {
@@ -143,20 +107,223 @@ Page({
   onPageChanged: function(){
     const that = this;
     const current = that.data.current;
+    const windowSize = that.data.windowSize;
     const airData = that.data.airData;
-    const ctx = wx.createCanvasContext('canvas');
     switch (that.data.current) {
       case 0:
-        chartUtil.topLine('canvas', airData.History.daily, '过去24小时AQI变化情况');
-        chartUtil.bottomBar('canvas', airData.History.weekly, '过去一周AQI变化情况');
+        that.plotConcents(windowSize[1] * 0.8, windowSize[0] * 0.33, 'canvas1', airData);
+        that.plotDailyChanges(windowSize[1] * 0.8, windowSize[0] * 0.33, 'canvas2', airData);
         break;
       case 1:
-        ctx.draw(); 
+        that.plotWeeklyChanges(windowSize[1] * 0.8, windowSize[0] * 0.33, 'canvas1', airData);
+        that.plotMonthlyChanges(windowSize[1] * 0.8, windowSize[0] * 0.33, 'canvas2', airData);
         break;
       case 2:
-        ctx.draw(); 
+      
         break;
     }
-  }
+    
+  },
   
+  plotConcents: function (width, height, canvasId, airData){
+    concentsChart = new wxCharts({
+      canvasId: canvasId,
+      type: 'column',
+      animation: true,
+      categories: ['甲醛', 'PM1.0', 'PM2.5', 'PM10'],
+      series: [{
+        name: '污染物种类',
+        data: airData.Concent,
+        format: function (val, name) {
+          return val.toFixed(0);
+        }
+      }],
+      yAxis: {
+        format: function (val) {
+          return val;
+        },
+        title: '污染物浓度（微克/立方米）',
+        min: 0
+      },
+      xAxis: {
+        disableGrid: false,
+        type: 'calibration'
+      },
+      extra: {
+        column: {
+          width: 30
+        }
+      },
+      width: width,
+      height: height,
+    });
+  },
+
+
+  plotDailyChanges: function(width, height, canvasId, airData){
+    const date = new Date();
+    var now = date.getHours()-1;
+    var categories = [];
+    while(now >= 0){
+      categories.unshift('当日' + now + ':00');
+      now--;
+    }
+    now = 23;
+    while (now > date.getHours()-1){
+      categories.unshift('昨日' + now + ':00');
+      now--;
+    }
+
+    dailyChangeChart = new wxCharts({
+      canvasId: canvasId,
+      type: 'line',
+      categories: categories,
+      animation: true,
+      // background: '#f5f5f5',
+      series: [{
+        name: '过去24小时AQI指数变化',
+        data: airData.History.daily,
+        format: function (val, name) {
+          return val.toFixed(0);
+        }
+      }],
+      xAxis: {
+        disableGrid: true
+      },
+      yAxis: {
+        title: 'AQI指数',
+        format: function (val) {
+          return val.toFixed(0);
+        },
+        min: 0
+      },
+      width: width,
+      height: height,
+      dataLabel: false,
+      dataPointShape: true,
+      extra: {
+        lineStyle: 'curve'
+      }
+    });
+  },
+
+
+  plotWeeklyChanges: function (width, height, canvasId, airData){
+    const date = new Date();
+    var now = date.getDay()-1;
+    var weekday = new Array(7);
+    weekday[0] = "周日";
+    weekday[1] = "周一";
+    weekday[2] = "周二";
+    weekday[3] = "周三";
+    weekday[4] = "周四";
+    weekday[5] = "周五";
+    weekday[6] = "周六";
+    var categories = [];
+    while (now >= 0) {
+      categories.unshift(weekday[now]);
+      now--;
+    }
+    now = 6;
+    while (now > date.getDay()-1) {
+      categories.unshift(weekday[now]);
+      now--;
+    }
+
+    weeklyChangeChart = new wxCharts({
+      canvasId: canvasId,
+      type: 'line',
+      categories: categories,
+      animation: true,
+      // background: '#f5f5f5',
+      series: [{
+        name: '过去7天AQI指数变化',
+        data: airData.History.weekly,
+        format: function (val, name) {
+          return val.toFixed(0);
+        }
+      }],
+      xAxis: {
+        disableGrid: true
+      },
+      yAxis: {
+        title: 'AQI指数',
+        format: function (val) {
+          return val.toFixed(0);
+        },
+        min: 0
+      },
+      width: width,
+      height: height,
+      dataLabel: false,
+      dataPointShape: true,
+      extra: {
+        lineStyle: 'curve'
+      }
+    });
+  },
+
+
+  plotMonthlyChanges: function (width, height, canvasId, airData) {
+    const date = new Date();
+    var now = date.getMonth()-1;
+    var months = new Array(12);
+    months[0] = "一月";
+    months[1] = "二月";
+    months[2] = "三月";
+    months[3] = "四月";
+    months[4] = "五月";
+    months[5] = "六月";
+    months[6] = "七月";
+    months[7] = "八月";
+    months[8] = "九月";
+    months[9] = "十月";
+    months[10] = "十一月";
+    months[11] = "十二月";
+    var categories = [];
+    while (now >= 0) {
+      categories.unshift(months[now]);
+      now--;
+    }
+    now = 11;
+    while (now > date.getMonth()-1) {
+      categories.unshift(months[now]);
+      now--;
+    }
+
+    monthlyChangeChart = new wxCharts({
+      canvasId: canvasId,
+      type: 'line',
+      categories: categories,
+      animation: true,
+      // background: '#f5f5f5',
+      series: [{
+        name: '过去12月AQI指数变化',
+        data: airData.History.monthly,
+        format: function (val, name) {
+          return val.toFixed(0);
+        }
+      }],
+      xAxis: {
+        disableGrid: true
+      },
+      yAxis: {
+        title: 'AQI指数',
+        format: function (val) {
+          return val.toFixed(0);
+        },
+        min: 0
+      },
+      width: width,
+      height: height,
+      dataLabel: false,
+      dataPointShape: true,
+      extra: {
+        lineStyle: 'curve'
+      }
+    });
+  }
+
+  
+
 })

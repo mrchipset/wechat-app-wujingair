@@ -1,7 +1,6 @@
 // pages/settings/settings.js
 const app = getApp();
 const weatherUtil = require('../../utils/weather.js');
-const chartUtil = require('../../utils/chart.js');
 
 Page({
   data: {

@@ -1,7 +1,6 @@
 // pages/menu/menu.js
 const app = getApp();
 const weatherUtil = require('../../utils/weather.js');
-const chartUtil = require('../../utils/chart.js');
 const sensorUtil = require('../../utils/sensor.js');
 var touchDot = 0;
 var touchMove = 0;
@@ -13,50 +12,53 @@ Page({
     userInfo: {},
     windowSize: [],
     weatherData: {},
-    bgClass: '',
+    bgColor: '',
+    settingMenuShown: false,
     airData:[
       {
         Did: '00001',
         Dtype: 'Light-01',
-        State: 0,
+        systemOn: false,
+        automodeOn: false,
+        windlevel: 50,
+        oxygenlevel: 50,
         AutoRun: {
           on: undefined,
           off: undefined
         },
         Users: undefined,
-        AQI: 50,
+        AQI: 43,
         Tem: 23,
         Hum: '20%',
-        Concent:[
-          {
-            tag: '甲醛',
-            value: 2
-          },
-          {
-            tag: 'PM1.0',
-            value: 31
-          },
-          {
-            tag: 'PM2.5',
-            value: 31
-          },
-          {
-            tag: 'PM10',
-            value: 45
-          },
-          {
-            tag: 'TVOC',
-            value: 34
-          },
-          {
-            tag: 'VOC',
-            value: 29
-          }
-        ],
+        Concent:[2, 31, 31, 44],
         Loc: '上海理工大学第二学生公寓',
         History: {
           daily: [20, 30, 45, 60, 50, 23, 62, 44, 90, 120, 65, 25, 88, 55, 14, 72, 80, 76, 40, 20, 15, 20, 36, 37],
-          weekly: [57, 68, 50, 44, 38, 36, 18]
+          weekly: [57, 68, 50, 44, 38, 36, 18],
+          monthly: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 60, 58, 46, 48]
+        }
+      },
+      {
+        Did: '00002',
+        Dtype: 'Light-01', 
+        systemOn: true,
+        automodeOn: false,
+        windlevel: 60,
+        oxygenlevel: 40,
+        AutoRun: {
+          on: undefined,
+          off: undefined
+        },
+        Users: undefined,
+        AQI: 79,
+        Tem: 23,
+        Hum: '20%',
+        Concent: [5, 25, 38, 40],
+        Loc: '上海理工大学第二学生公寓',
+        History: {
+          daily: [20, 30, 45, 60, 50, 23, 62, 44, 90, 120, 65, 25, 88, 55, 14, 72, 80, 76, 40, 20, 15, 20, 36, 37],
+          weekly: [57, 68, 50, 44, 38, 36, 18],
+          monthly: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 60, 58, 46, 48]
         }
       }
     ],
@@ -66,27 +68,14 @@ Page({
 
   onLoad: function () {
     const that = this;
+    var airData = that.data.airData;
+    var current = that.data.current;
     that.setData({
       windowSize: app.globalData.windowSize,
       userInfo: app.globalData.userInfo
     });
-    weatherUtil.getWeather(function (res) {
-      that.setData({
-        weatherData: res
-      });
-      weatherUtil.getBgImage(that.data.weatherData, function (res) {
-        that.setData({
-          bgClass: res.bgImage
-        });
-        wx.setNavigationBarColor({
-          frontColor: "#ffffff",
-          backgroundColor: res.topColor
-        });
-      });
-    });
+    that.updateBackground();
 
-    var airData = that.data.airData;
-    var current = that.data.current;
     wx.connectSocket({
       url: 'ws://wujingair.com:12345'
     });
@@ -110,21 +99,17 @@ Page({
     });
     wx.onSocketMessage(function(res){
       console.log(res);
+
+      /*
       that.setData({
         airData: sensorUtil.updateAirData(airData, res.data, current)
       });
-      chartUtil.verticalBar('dataBar', airData[current].Concent);
+      */
     });
     
     
   },
 
-
-  onReady: function () {
-    const that = this;
-    const airData = that.data.airData;
-    chartUtil.verticalBar('dataBar', airData[0].Concent);
-  },
 
   onSwiperChanged: function(e) {
     const that = this;
@@ -133,26 +118,23 @@ Page({
     that.setData({
       current: current
     });
-    for (var i = 0; i < airData.length; i++) {
-      const ctx = wx.createCanvasContext('dataBar' + i);
-      ctx.draw();
-    }
-    chartUtil.verticalBar('dataBar', airData[current].Concent);
+
+    that.updateBackground();
   },
 
 
-  touchStart: function(e){
+  touchStart_Canvas: function(e){
     touchDot = e.touches[0].x;
     touchInterval = setInterval(function () {
       touchTime++;
     }, 100); 
   },
 
-  touchMove: function (e) {
+  touchMove_Canvas: function (e) {
     touchMove = e.touches[0].x;
   },
 
-  touchEnd: function () {
+  touchEnd_Canvas: function () {
     const that = this;
     const current = that.data.current;
     const airData = that.data.airData;
@@ -173,34 +155,164 @@ Page({
     clearInterval(touchInterval);
     touchTime = 0; 
   },
-  
 
-  openSettings: function(){
+
+  touchStart_Menu: function (e) {
+    touchDot = e.touches[0].pageY;
+    touchInterval = setInterval(function () {
+      touchTime++;
+    }, 100);
+  },
+
+  touchMove_Menu: function (e) {
+    touchMove = e.touches[0].pageY;
+  },
+
+  touchEnd_Menu: function () {
+    const that = this;
+    const settingMenuShown = that.data.settingMenuShown;
+    if (touchMove - touchDot <= -100 && touchTime < 10) {
+      that.setData({
+        settingMenuShown: true
+      });
+    }
+    if (touchMove - touchDot >= 100 && touchTime < 10) {
+      that.setData({
+        settingMenuShown: false
+      });
+    }
+    clearInterval(touchInterval);
+    touchTime = 0;
+  },
+
+
+  updateBackground: function(){
+    const that = this;
+    var airData = that.data.airData;
+    var current = that.data.current;
+    weatherUtil.getWeather(function (res) {
+      that.setData({
+        weatherData: res
+      });
+      weatherUtil.getBgImage(airData[current].AQI, function (res) {
+        that.setData({
+          bgColor: res.bgColor
+        });
+        wx.setNavigationBarColor({
+          frontColor: "#ffffff",
+          backgroundColor: res.bgColor
+        });
+      });
+    });
+  },
+  
+  
+  openDetailsPage: function(){
+    const that = this;
+    const airData = that.data.airData;
+    const current = that.data.current;
+    wx.setStorageSync('airData', airData[current]);
+    if (wx.getStorageInfoSync('airData')){
+      wx.navigateTo({
+        url: '../info/info'
+      });
+    }
+  },
+
+
+  onSystemSwitchChanged: function () {
     const that = this;
     const current = that.data.current;
-    wx.showActionSheet({
-      itemList: [
-        '详细信息', '远程控制', '新增设备'
-      ],
-      success: function(e){
-        switch (e.tapIndex) {
-          case 0:
-            wx.navigateTo({
-              url: '../info/info?airDataKey=' + current
-            });
-            break;
-          case 1:
-            wx.navigateTo({
-              url: '../settings/settings?airDataKey=' + current
-            });
-            break;
-          case 2:
-            wx.navigateTo({
-              url: '../add/add'
-            });
-            break;
+    var airData = that.data.airData;
+    airData[current].systemOn = !airData[current].systemOn;
+    that.setData({
+      airData: airData
+    });
+    const socketConnected = app.globalData.socketConnected;
+    if (socketConnected) {
+      wx.sendSocketMessage({
+        data: JSON.stringify(
+          {
+            wx_id: 'my_wx_id',
+            protocol: "func",
+            tcp_id: "wujing-air-B123",
+            func: airData[current].systemOn ? "off" : "on",
+            params: 2
+          }
+        ),
+        success: function () {
+          console.info("SystemOn: " + !airData[current].systemOn);
         }
+      });
+    }
+    if (!airData[current].systemOn){
+      airData[current].automodeOn = false;
+      that.setData({
+        airData: airData
+      });
+    }
+  },
+
+
+  onAutomodeSwitchChanged: function () {
+    const that = this;
+    const current = that.data.current;
+    var airData = that.data.airData;
+    if(airData[current].systemOn){
+      airData[current].automodeOn = !airData[current].automodeOn;
+      that.setData({
+        airData: airData
+      });
+    }
+  },
+
+
+  onWindlevelChanged: function (res) {
+    const that = this;
+    const current = that.data.current;
+    var airData = that.data.airData;
+    const windlevel = res.detail.value;
+    airData[current].windlevel = windlevel;
+    that.setData({
+      airData: airData
+    });
+    const socketConnected = app.globalData.socketConnected;
+    if (socketConnected) {
+      var para = 0;
+      if (windlevel == 0) {
+        para = 0;
+      } else if (windlevel > 0 && windlevel <= 33) {
+        para = 1;
+      } else if (windlevel > 33 && windlevel <= 67) {
+        para = 2;
+      } else {
+        para = 3;
       }
+      wx.sendSocketMessage({
+        data: JSON.stringify(
+          {
+            wx_id: 'my_wx_id',
+            protocol: "func",
+            tcp_id: "wujing-air-B123",
+            func: "speed",
+            params: para
+          }
+        ),
+        success: function () {
+          console.info("Windlevel: " + para);
+        }
+      });
+    }
+  },
+
+
+  onOxygenlevelChanged: function (res) {
+    const that = this;
+    const current = that.data.current;
+    var airData = that.data.airData;
+    airData[current].oxygenlevel = res.detail.value;
+    that.setData({
+      airData: airData
     });
   }
 })

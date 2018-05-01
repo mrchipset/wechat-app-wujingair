@@ -7,31 +7,7 @@
   width: 100%; 
   overflow: hidden;
 } 
-.bg-SunnyDay {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SunnyDay.png');
-}
-.bg-RainyDay {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url('https://www.wujingair.com/fs/menu-bgimage/RainyDay.png');
-}
-.bg-SnowyDay {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SnowyDay.png');
-}
-.bg-SunnyDusk {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url('https://www.wujingair.com/fs/menu-bgimage/SunnyDusk.png');
-}
-.bg-CloudyNight {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url('https://www.wujingair.com/fs/menu-bgimage/CloudyNight.png');
-}
+
 .bg-grayboard {
   width: 80%;
   margin: 0 10%;
@@ -39,6 +15,7 @@
   filter: opacity(50);
 }
 
+/*
 @keyframes flash {
   from, 50%, to {
     color: #fff;
@@ -60,6 +37,7 @@
   animation-iteration-count: infinite;
   animation-name: flash;
 }
+*/
 
 .swiper-box {
   width: 100%;
@@ -142,4 +120,49 @@
   position: absolute;
   right: 5%;
   bottom: 128rpx;
+}
+
+.setting-menu{
+  position: fixed;
+  width: 100%;
+  height: 50%;
+  bottom: -25%;
+  left: 0;
+  background-color: #fff;
+  transform: rotate(0deg) scale(1) translate(0%,-50%); 
+  -webkit-transform: rotate(0deg) scale(1) translate(0%,-50%);   
+  transition: all 0.4s ease;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.setting-menu-show{
+  transform: rotate(0deg) scale(1) translate(0%,0%);
+  -webkit-transform: rotate(0deg) scale(1) translate(0%,0%);
+}
+.setting-menu-tophalf{
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.setting-menu-bottomhalf{
+  width: 100%;
+  height: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.setting-menu-icon{
+  width: 128rpx;
+}
+.setting-menu-icon-mini{
+  width: 48rpx;
+  margin-right: 24rpx;
+}
+.setting-menu-icon-gray{
+  background-color: gray;
+  color: gray;
 }

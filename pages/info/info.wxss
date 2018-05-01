@@ -2,10 +2,18 @@
 @import "../../ripples.wxss";
 
 .bgcover {
-  display: block; 
   height: 100%; 
   width: 100%; 
   overflow: hidden;
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  -webkit-text-size-adjust:none;
+  -webkit-user-select: none;
+  font-size: 35rpx;
+  color: #333;
+  font-family: Helvetica,Arial,"Helvetica Neue","Droid Sans","Microsoft YaHei",sans-serif;
 } 
 
 .basic-info {
@@ -52,8 +60,9 @@
   opacity: 0.3;
 }
 
-.data-chart {
+.canvas {
   width: 80%;
-  margin: 2% 10%;
-  border: #000 1px solid;
+  height: 33%;
+  justify-content: center;
+  margin: 0 auto;
 }

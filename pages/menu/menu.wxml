@@ -1,7 +1,7 @@
 <!--pages/menu/menu.wxml-->
-<view class="bgcover bg-{{bgClass}}" style="height:{{windowSize[0]}}px;">
+<view class="bgcover" style="height:{{windowSize[0]}}px;background-color:{{bgColor}};">
   
-  <swiper style="height:{{windowSize[0]*0.35}}px;" current="{{current}}" bindchange="onSwiperChanged">
+  <swiper style="height:{{settingMenuShown ? '50%' : '75%'}};" current="{{current}}" bindchange="onSwiperChanged" indicator-dots="true">
     <block wx:for="{{airData}}" wx:key="unique">
       <swiper-item>
         <view class="swiper-box">
@@ -16,15 +16,30 @@
     </block>
   </swiper>
 
-  <canvas class="data-bar" style="height:{{windowSize[0]*0.5}}px;" id="dataBar" canvas-id="dataBar" disable-scroll="true" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"/>
-  
-  <swiper style="height:{{windowSize[0]*0.15}}px;" current="{{current}}" indicator-dots="true" bindchange="onSwiperChanged">
-    <block wx:for="{{airData}}" wx:key="unique">
-      <swiper-item>
-      </swiper-item>
-    </block>
-  </swiper>
-
 </view>
 
+<!--
 <image src="../../src/button-icon/Setting.png" mode="widthFix" class="setting-btn ripple infinite rotateCircle" bindtap="openSettings"></image>
+-->
+
+<view class="setting-menu {{settingMenuShown ? '' : 'setting-menu-show'}}" bindtouchstart="touchStart_Menu" bindtouchmove="touchMove_Menu" bindtouchend="touchEnd_Menu">
+  <view class='setting-menu-tophalf'>
+    <image class="setting-menu-icon" style="background-color:{{airData[current].systemOn?bgColor:'gray'}};" src="../../src/button-icon/Power.png" mode="widthFix" bindtap='onSystemSwitchChanged'></image>
+    <image class="setting-menu-icon" style="background-color:{{airData[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/AutoMode.png" mode="widthFix" bindtap='onAutomodeSwitchChanged'></image>
+    <image class="setting-menu-icon" style="background-color:{{bgColor}};" src="../../src/button-icon/Details.png" mode="widthFix" bindtap='openDetailsPage'></image>
+  </view>
+  <view class='setting-menu-bottomhalf'>
+    <view style="display:flex;align-items:center;margin:0 8%;color:{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}};">
+      <image class="setting-menu-icon-mini" style="background-color:{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/WindLevel.png" mode="widthFix"/>
+      风速调节: {{airData[current].windlevel}}%
+    </view>
+    <slider style='margin:0 8%;' disabled="{{!(airData[current].systemOn&&!airData[current].automodeOn)}}" activeColor="{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}}" backgroundColor="{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}}" value='{{airData[current].windlevel}}' bindchange='onWindlevelChanged'></slider>
+  </view>
+  <view class='setting-menu-bottomhalf'>
+    <view style="display:flex;align-items:center;margin:0 8%;color:{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}};">
+      <image class="setting-menu-icon-mini" style="background-color:{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/OxygenLevel.png" mode="widthFix"/>
+      负氧离子调节: {{airData[current].oxygenlevel}}%
+    </view>
+    <slider style='margin:0 8%;' disabled="{{!(airData[current].systemOn&&!airData[current].automodeOn)}}" activeColor="{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}}" backgroundColor="{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}}" value='{{airData[current].oxygenlevel}}' bindchange='onOxygenlevelChanged'></slider>
+  </view>
+</view>
