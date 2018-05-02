@@ -19,9 +19,18 @@
 
   <image class="guide-arrow" style="width:{{windowSize[0]*0.025/261*1000}}px;visibility:{{current!=0 ? 'visible' : 'hidden'}};" src="../../src/button-icon/ToUpper.png" mode="widthFix" bindtap="lastPage"></image>
 
+  <!--
   <canvas canvas-id="canvas1" disable-scroll="true" class="canvas" bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEnd'></canvas>
   <canvas canvas-id="canvas2" disable-scroll="true" class="canvas" bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEnd'></canvas>
+  -->
+
+  <view class='canvas-blank'/>
 
   <image class="guide-arrow" style="width:{{windowSize[0]*0.025/261*1000}}px;visibility:{{current!=2 ? 'visible' : 'hidden'}};" src="../../src/button-icon/ToLower.png" mode="widthFix" bindtap="nextPage"></image>
 
+</view>
+
+<view class='echarts-container'>
+  <ec-canvas id="echart-top" canvas-id="echart-top" ec="{{echart_top}}" />
+  <ec-canvas id="echart-bottom" canvas-id="echart-bottom" ec="{{echart_bottom}}" />
 </view>

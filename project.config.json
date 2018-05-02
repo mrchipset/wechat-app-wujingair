@@ -8,7 +8,7 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.5.4",
+	"libVersion": "1.9.91",
 	"appid": "wxc8f6c6d29ff1cb8b",
 	"projectname": "%E6%82%9F%E5%87%80%E7%A9%BA%E6%B0%94%E5%87%80%E5%8C%96%E5%99%A8",
 	"condition": {
@@ -31,9 +31,9 @@
 			"current": -1,
 			"list": [
 				{
-					"id": -1,
+					"id": 0,
 					"name": "test-page",
-					"pathName": "pages/mchart/mchart",
+					"pathName": "pages/multiCharts/index",
 					"query": ""
 				}
 			]

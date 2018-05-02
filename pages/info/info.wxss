@@ -66,3 +66,44 @@
   justify-content: center;
   margin: 0 auto;
 }
+
+.canvas-blank {
+  width: 100%;
+  height: 66%;
+  justify-content: center;
+}
+
+.echarts-container {
+  width: 80%;
+  height: 64%;
+  position: absolute;
+  top: 30.5%;
+  bottom: 2.5%;
+  left: 10%;
+  right: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  z-index: 999;
+  background: #fff;
+} 
+#echart-top {
+  position: absolute;
+  top: 0;
+  bottom: 50%;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: #fff;
+}
+#echart-bottom {
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: #fff;
+}

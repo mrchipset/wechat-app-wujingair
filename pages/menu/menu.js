@@ -32,6 +32,7 @@ Page({
         Hum: '20%',
         Concent:[2, 31, 31, 44],
         Loc: '上海理工大学第二学生公寓',
+        Province: 'anhui',
         History: {
           daily: [20, 30, 45, 60, 50, 23, 62, 44, 90, 120, 65, 25, 88, 55, 14, 72, 80, 76, 40, 20, 15, 20, 36, 37],
           weekly: [57, 68, 50, 44, 38, 36, 18],
@@ -52,9 +53,10 @@ Page({
         Users: undefined,
         AQI: 79,
         Tem: 23,
-        Hum: '20%',
+        Hum: '24%',
         Concent: [5, 25, 38, 40],
-        Loc: '上海理工大学第二学生公寓',
+        Loc: '北京市方恒国际中心A座',
+        Province: 'beijing',
         History: {
           daily: [20, 30, 45, 60, 50, 23, 62, 44, 90, 120, 65, 25, 88, 55, 14, 72, 80, 76, 40, 20, 15, 20, 36, 37],
           weekly: [57, 68, 50, 44, 38, 36, 18],
@@ -82,6 +84,18 @@ Page({
     wx.onSocketOpen(function (){ 
       console.info('Websocket Connected.');
       app.globalData.socketConnected = true;
+      wx.sendSocketMessage({
+        data: JSON.stringify(
+          {
+            wx_id: 'my_wx_id',
+            protocol: "login",
+            tcp_id: "wujing-air-B123"
+          }
+        ),
+        success: function () {
+          console.info("Webxocket Login.");
+        }
+      });
     });
     wx.onSocketError(function (){
       console.error('WebSocket Error.');
@@ -236,12 +250,12 @@ Page({
             wx_id: 'my_wx_id',
             protocol: "func",
             tcp_id: "wujing-air-B123",
-            func: airData[current].systemOn ? "off" : "on",
+            func: airData[current].systemOn ? "on" : "off",
             params: 2
           }
         ),
         success: function () {
-          console.info("SystemOn: " + !airData[current].systemOn);
+          console.info("SystemOn: " + airData[current].systemOn);
         }
       });
     }

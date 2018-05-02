@@ -3,7 +3,8 @@ App({
   globalData: {
     userInfo: null,
     windowSize: [],
-    socketConnected: false
+    socketConnected: false,
+    mapData: []
   },
 
   onLaunch: function () {
@@ -22,6 +23,7 @@ App({
         that.globalData.windowSize = [res.windowHeight, res.windowWidth];
       }
     });
+
   }
   
 })
