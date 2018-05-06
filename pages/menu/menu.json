@@ -1,3 +1,7 @@
 {
-  "disableScroll": true
+  "disableScroll": true,
+  "window": {
+    "navigationBarBackgroundColor": "#209E85",
+    "navigationBarTextStyle": "#fff"
+  }
 }

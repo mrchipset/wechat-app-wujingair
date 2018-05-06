@@ -1,36 +1,41 @@
 <!--pages/info/info.wxml-->
-<view class="bgcover" style="height:{{windowSize[0]}}px;">
+<view class="bgcover" style="height:{{windowSize[0]*0.2}}px;">
   
-  <view class="basic-info" style="height:10%;">
+  <view class="basic-info" style="height:50%;">
     <image class="weather-icon" src="../../src/weather-icon/{{weatherIcon}}.png" mode="widthFix"></image>
-    <view class="loc-label">{{airData.Loc}}</view>
+    <view class="loc-label">{{airData.Province+', '+airData.City}}</view>
   </view>
 
-  <view class="basic-info" style="height:10%;border-bottom:#000 1px solid;">
+  <view class="basic-info" style="height:50%;border-bottom:#000 1px solid;">
     <view class="temhum-label">
       <image class="temhum-logo" src="../../src/button-icon/Tem-icon.png" mode="widthFix"></image>
       <text>{{airData.Tem}}℃</text>
     </view>
     <view class="temhum-label">
       <image class="temhum-logo" src="../../src/button-icon/Hum-icon.png" mode="widthFix"></image>
-      <text>{{airData.Hum}}</text>
+      <text>{{airData.Hum}}%</text>
     </view>
   </view>
 
-  <image class="guide-arrow" style="width:{{windowSize[0]*0.025/261*1000}}px;visibility:{{current!=0 ? 'visible' : 'hidden'}};" src="../../src/button-icon/ToUpper.png" mode="widthFix" bindtap="lastPage"></image>
-
   <!--
-  <canvas canvas-id="canvas1" disable-scroll="true" class="canvas" bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEnd'></canvas>
-  <canvas canvas-id="canvas2" disable-scroll="true" class="canvas" bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEnd'></canvas>
-  -->
-
+  <image class="guide-arrow" style="width:{{windowSize[0]*0.025/261*1000}}px;visibility:{{current!=0 ? 'visible' : 'hidden'}};" src="../../src/button-icon/ToUpper.png" mode="widthFix" bindtap="lastPage"></image>
   <view class='canvas-blank'/>
-
   <image class="guide-arrow" style="width:{{windowSize[0]*0.025/261*1000}}px;visibility:{{current!=2 ? 'visible' : 'hidden'}};" src="../../src/button-icon/ToLower.png" mode="widthFix" bindtap="nextPage"></image>
+  -->
 
 </view>
 
-<view class='echarts-container'>
-  <ec-canvas id="echart-top" canvas-id="echart-top" ec="{{echart_top}}" />
-  <ec-canvas id="echart-bottom" canvas-id="echart-bottom" ec="{{echart_bottom}}" />
+<view class='echarts-container' style="height:{{512*6+24*6}}rpx;">
+  <view id="label0">{{labels[0]}}</view>
+  <ec-canvas id="chart0" canvas-id="chart0" ec="{{charts[0]}}" />
+  <view id="label1">{{labels[1]}}</view>
+  <ec-canvas id="chart1" canvas-id="chart1" ec="{{charts[1]}}" />
+  <view id="label2">{{labels[2]}}</view>
+  <ec-canvas id="chart2" canvas-id="chart2" ec="{{charts[2]}}" />
+  <view id="label3">{{labels[3]}}</view>
+  <ec-canvas id="chart3" canvas-id="chart3" ec="{{charts[3]}}" />
+  <view id="label4">{{labels[4]}}</view>
+  <ec-canvas id="chart4" canvas-id="chart4" ec="{{charts[4]}}" />
+  <view id="label5">{{labels[5]}}</view>
+  <ec-canvas id="chart5" canvas-id="chart5" ec="{{charts[5]}}" />
 </view>

@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/menu/menu",
-    "pages/settings/settings",
     "pages/info/info",
     "pages/add/add"
   ],

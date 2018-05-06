@@ -1,6 +1,27 @@
 //lbs.amap.com key
 const apiKey = "f2f456df296c41ddaf3e1742468f0dbf";
 
+//get AQI
+function getAQI(provc, city, callback){
+  var apiUrl = 'https://www.wujingair.com/getaqi.php?id=' + city;
+  wx.request({
+    url: apiUrl,
+    success: function (res) {
+      if(!res.data.aqi){
+        apiUrl = 'https://www.wujingair.com/getaqi.php?id=' + provc;
+        wx.request({
+          url: apiUrl,
+          success: function(res){
+            callback(res.data.aqi);
+          }
+        });
+      }else{
+        callback(res.data.aqi);
+      }
+    }
+  });
+}
+
 //get weather info
 function getWeather(adcode, callback) {
   const apiURL = "https://restapi.amap.com/v3/weather/weatherInfo?output=json&extensions=base&city=" + adcode + "&key=" + apiKey;
@@ -138,5 +159,6 @@ function getWeatherIcon(weatherData, callback) {
 module.exports = {
   getWeather: printOut,
   getBgImage: getBgImage,
-  getWeatherIcon: getWeatherIcon
+  getWeatherIcon: getWeatherIcon,
+  getAQI: getAQI
 }

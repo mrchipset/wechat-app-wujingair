@@ -1,6 +1,7 @@
 // pages/info/info.js
 const app = getApp();
 const weatherUtil = require('../../utils/weather.js');
+const pinyinUtil = require('../../utils/pinyin.js');
 
 import * as echarts from '../../utils/echarts/echarts.js';
 import chinaJson from '../../src/map-data/china.js';
@@ -11,26 +12,48 @@ Page({
     windowSize: [],
     weatherData: {},
     weatherIcon: 'Sunny',
+    index: -1,
     airData: {},
-    current: 0,
     mapData: [],
-    echart_top: {
-      lazyLoad: true
-    },
-    echart_bottom: {
-      lazyLoad: true
-    }
+    labels: [
+      '实时污染物浓度(微克/立方米)',
+      '过去24小时污染物浓度变化',
+      '过去7天污染物浓度变化',
+      '过去12月污染物浓度变化',
+      '当地AQI指数分布',
+      '全国AQI指数分布',
+    ],
+    charts: [
+      {
+        lazyLoad: true
+      },
+      {
+        lazyLoad: true
+      },
+      {
+        lazyLoad: true
+      },
+      {
+        lazyLoad: true
+      },
+      {
+        lazyLoad: true
+      },
+      {
+        lazyLoad: true
+      }
+    ]
   },
 
 
-  onLoad: function () {
+  onLoad: function (options) {
     const that = this;
     const airData = wx.getStorageSync('airData');
-    wx.removeStorageSync('airData');
     that.setData({
       windowSize: app.globalData.windowSize,
       userInfo: app.globalData.userInfo,
-      airData: airData,
+      index: options.index,
+      airData: airData[options.index],
       mapData: app.globalData.mapData
     });
 
@@ -49,10 +72,7 @@ Page({
 
   onReady: function () {
     const that = this;
-    const airData = that.data.airData;
-    that.echartTop = that.selectComponent('#echart-top');
-    that.echartBottom = that.selectComponent('#echart-bottom');
-    that.onPageChanged();
+    that.showPlots();
   },
 
 
@@ -70,26 +90,38 @@ Page({
     this.onPageChanged();
   },
 
-  onPageChanged: function () {
-    const that = this;
-    const current = that.data.current;
-    const windowSize = that.data.windowSize;
-    const airData = that.data.airData;
-    switch (that.data.current) {
-      case 0:
-        that.plotConcents(that.echartTop, airData);
-        that.plotDailyChange(that.echartBottom, airData);
-        break;
-      case 1:
-        that.plotWeeklyChange(that.echartTop, airData);
-        that.plotMonthlyChange(that.echartBottom, airData);
-        break;
-      case 2:
-        that.plotProvinceContour(that.echartTop, airData.Province);
-        that.plotChinaContour(that.echartBottom);
-        break;
-    }
 
+  showPlots: function(){
+    const that = this;
+    var airData = that.data.airData;
+
+    that.chart0 = that.selectComponent('#chart0');
+    var concentsChart = that.plotConcents(that.chart0, airData);
+    setInterval(function () {
+      airData = wx.getStorageSync('airData');
+      airData = airData[that.data.index];
+      that.plotConcents(that.chart0, airData);
+    }, 5000);
+
+    that.chart1 = that.selectComponent('#chart1');
+    that.plotDailyChange(that.chart1, airData);
+
+    that.chart2 = that.selectComponent('#chart2');
+    that.plotWeeklyChange(that.chart2, airData);
+
+    that.chart3 = that.selectComponent('#chart3');
+    that.plotMonthlyChange(that.chart3, airData);
+
+    that.chart4 = that.selectComponent('#chart4');
+    that.plotProvinceContour(that.chart4, airData.Province);
+    const labels = that.data.labels;
+    labels[4] = airData.Province + 'AQI指数分布';
+    that.setData({
+      labels: labels
+    });
+
+    that.chart5 = that.selectComponent('#chart5');
+    that.plotChinaContour(that.chart5);
   },
 
 
@@ -101,59 +133,38 @@ Page({
         height: height
       });
 
-      const option = {
-        color: ['#7cb5ec'],
+      var option = {
+        color: ['#7cb5ec', '#f7a35c', '#434348', '#90ed7d'],
+        /*
         title: {
           text: '污染物浓度（微克/立方米）'
         },
+        */
         grid: {
-          left: 20,
-          right: 20,
-          bottom: 15,
-          top: 40,
+          left: 0,
+          right: 0,
+          bottom: 30,
+          top: 30,
           containLabel: true
         },
-        xAxis: [
-          {
-            type: 'value',
-            axisLine: {
-              lineStyle: {
-                color: 'gray'
-              }
-            },
-            axisLabel: {
-              color: 'gray'
+        yAxis: {
+          type: 'value'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['甲醛', 'PM1.0', 'PM2.5', 'PM10']
+        },
+        series: {
+          name: '污染物浓度（微克/立方米）',
+          type: 'bar',
+          label: {
+            normal: {
+              show: true,
+              position: 'top'
             }
-          }
-        ],
-        yAxis: [
-          {
-            type: 'category',
-            axisTick: { show: false },
-            data: ['甲醛', 'PM1.0', 'PM2.5', 'PM10'],
-            axisLine: {
-              lineStyle: {
-                color: 'gray'
-              }
-            },
-            axisLabel: {
-              color: 'gray'
-            }
-          }
-        ],
-        series: [
-          {
-            name: '污染物浓度（微克/立方米）',
-            type: 'bar',
-            label: {
-              normal: {
-                show: true,
-                position: 'inside'
-              }
-            },
-            data: airData.Concent
-          }
-        ]
+          },
+          data: airData.Concent
+        }
       };
       chart.setOption(option);
       return chart;
@@ -182,15 +193,27 @@ Page({
         height: height
       });
       var option = {
-        color: ['#7cb5ec'],
-        tooltip: {
-          trigger: 'axis'
-        },
+        /*
         title: {
-          text: '过去24小时AQI指数变化'
+          text: '过去24小时污染物浓度变化'
+        },
+        */
+        color: ['#7cb5ec', '#f7a35c', '#434348', '#90ed7d'],
+        legend: {
+          bottom: 30
+        },
+        tooltip: {
+          axisPointer: {
+            type: 'cross',
+            snap: true
+          }
         },
         grid: {
-          containLabel: true
+          left: 0,
+          right: 0,
+          bottom: 60,
+          top: 30,
+          containLabel: true,
         },
         xAxis: {
           type: 'category',
@@ -198,17 +221,138 @@ Page({
           data: categories
         },
         yAxis: {
-          x: 'center',
           type: 'value'
         },
-        series: [{
-          name: '过去24小时AQI指数变化',
-          type: 'line',
-          smooth: true,
-          data: airData.History.daily
-        }]
+        series: [
+          {
+            name: '甲醛',
+            type: 'line',
+            smooth: true,
+            data: airData.History.daily.voc
+          },
+          {
+            name: 'PM1.0',
+            type: 'line',
+            smooth: true,
+            data: airData.History.daily.pm1
+          },
+          {
+            name: 'PM2.5',
+            type: 'line',
+            smooth: true,
+            data: airData.History.daily.pm2
+          },
+          {
+            name: 'PM10',
+            type: 'line',
+            smooth: true,
+            data: airData.History.daily.pm10
+          }
+        ]
       };
       chart.setOption(option);
+      return chart;
+    });
+  },
+
+
+
+  plotDailyChange2: function (canvasId, airData) {
+    const that = this;
+    const date = new Date();
+    var now = date.getHours() - 1;
+    var categories = [];
+    while (now >= 0) {
+      categories.unshift('当日' + now + ':00');
+      now--;
+    }
+    now = 23;
+    while (now > date.getHours() - 1) {
+      categories.unshift('昨日' + now + ':00');
+      now--;
+    }
+    categories = ['0:00', '1:00', '2:00'];
+
+    canvasId.init((canvas, width, height) => {
+      const chart = echarts.init(canvas, null, {
+        width: width,
+        height: height
+      });
+      var baseOption = {
+        /*
+        title: {
+          text: '过去24小时污染物浓度变化'
+        },
+        */
+        color: ['#7cb5ec', '#f7a35c', '#434348', '#90ed7d'],
+        grid: {
+          left: 0,
+          right: 0,
+          bottom: 60,
+          top: 30,
+          containLabel: true,
+        },
+        timeline: {
+          axisType: 'category',
+          autoPlay: false,
+          data: categories
+        },
+        xAxis: {
+          type: 'category',
+          data: ['甲醛', 'PM1.0', 'PM2.5', 'PM10']
+        },
+        yAxis: {
+          type: 'value',
+          max: 120
+        },
+        series: {
+          name: '浓度（微克/立方米）',
+          type: 'bar'
+        }
+      };
+      var option = [
+        {
+          series: {
+            data: [
+              airData.History.daily.voc[0],
+              airData.History.daily.pm1[0],
+              airData.History.daily.pm2[0],
+              airData.History.daily.pm10[0]
+            ]
+          }
+        },
+        {
+          title: {
+            text: categories[1]
+          },
+          series: {
+            data: [
+              airData.History.daily.voc[1],
+              airData.History.daily.pm1[1],
+              airData.History.daily.pm2[1],
+              airData.History.daily.pm10[1]
+            ]
+          }
+        },
+        {
+          title: {
+            text: categories[2]
+          },
+          series: {
+            data: [
+              airData.History.daily.voc[2],
+              airData.History.daily.pm1[2],
+              airData.History.daily.pm2[2],
+              airData.History.daily.pm10[2]
+            ]
+          }
+        }
+      ];
+
+      chart.setOption({
+        baseOption: baseOption,
+        options: option
+      });
       return chart;
     });
   },
@@ -243,15 +387,27 @@ Page({
         height: height
       });
       var option = {
-        color: ['#7cb5ec'],
-        tooltip: {
-          trigger: 'axis'
-        },
+        /*
         title: {
           text: '过去7天AQI指数变化'
         },
+        */
+        color: ['#7cb5ec', '#f7a35c', '#434348', '#90ed7d'],
+        legend: {
+          bottom: 30
+        },
+        tooltip: {
+          axisPointer: {
+            type: 'cross',
+            snap: true
+          }
+        },
         grid: {
-          containLabel: true
+          left: 0,
+          right: 0,
+          bottom: 60,
+          top: 30,
+          containLabel: true,
         },
         xAxis: {
           type: 'category',
@@ -262,12 +418,32 @@ Page({
           x: 'center',
           type: 'value'
         },
-        series: [{
-          name: '过去7天AQI指数变化',
-          type: 'line',
-          smooth: true,
-          data: airData.History.weekly
-        }]
+        series: [
+          {
+            name: '甲醛',
+            type: 'line',
+            smooth: true,
+            data: airData.History.weekly.voc
+          },
+          {
+            name: 'PM1.0',
+            type: 'line',
+            smooth: true,
+            data: airData.History.weekly.pm1
+          },
+          {
+            name: 'PM2.5',
+            type: 'line',
+            smooth: true,
+            data: airData.History.weekly.pm2
+          },
+          {
+            name: 'PM10',
+            type: 'line',
+            smooth: true,
+            data: airData.History.weekly.pm10
+          }
+        ]
       };
       chart.setOption(option);
       return chart;
@@ -310,15 +486,27 @@ Page({
         height: height
       });
       var option = {
-        color: ['#7cb5ec'],
-        tooltip: {
-          trigger: 'axis'
-        },
+        /*
         title: {
           text: '过去12月AQI指数变化'
         },
+        */
+        color: ['#7cb5ec', '#f7a35c', '#434348', '#90ed7d'],
+        legend: {
+          bottom: 30
+        },
+        tooltip: {
+          axisPointer: {
+            type: 'cross',
+            snap: true
+          }
+        },
         grid: {
-          containLabel: true
+          left: 0,
+          right: 0,
+          bottom: 60,
+          top: 30,
+          containLabel: true,
         },
         xAxis: {
           type: 'category',
@@ -329,12 +517,32 @@ Page({
           x: 'center',
           type: 'value'
         },
-        series: [{
-          name: '过去12月AQI指数变化',
-          type: 'line',
-          smooth: true,
-          data: airData.History.monthly
-        }]
+        series: [
+          {
+            name: '甲醛',
+            type: 'line',
+            smooth: true,
+            data: airData.History.monthly.voc
+          },
+          {
+            name: 'PM1.0',
+            type: 'line',
+            smooth: true,
+            data: airData.History.monthly.pm1
+          },
+          {
+            name: 'PM2.5',
+            type: 'line',
+            smooth: true,
+            data: airData.History.monthly.pm2
+          },
+          {
+            name: 'PM10',
+            type: 'line',
+            smooth: true,
+            data: airData.History.monthly.pm10
+          }
+        ]
       };
       chart.setOption(option);
       return chart;
@@ -345,7 +553,6 @@ Page({
   plotChinaContour: function (canvasId) {
     const that = this;
     const mapData = that.data.mapData;
-    //const chinaJson = require(mapData[0]);
     canvasId.init((canvas, width, height) => {
       const chart = echarts.init(canvas, null, {
         width: width,
@@ -361,9 +568,11 @@ Page({
         });
       }
       const option = {
+        /*
         title: {
           text: '全国AQI分布云图'
         },
+        */
         visualMap: {
           min: 0,
           max: 350,
@@ -408,77 +617,87 @@ Page({
 
   plotProvinceContour: function (canvasId, province) {
     const that = this;
-    var provinceJson = null;
-    wx.request({
-      url: 'https://wujingair.com/map_data/' + province + '.json',
-      method: 'GET',
-      dataType: 'json',
-      success: function(res){
-        provinceJson = res.data;
-        console.log(provinceJson);
-        canvasId.init((canvas, width, height) => {
-          const chart = echarts.init(canvas, null, {
-            width: width,
-            height: height
-          });
-          echarts.registerMap(province, provinceJson);
-
-          var data = [];
-          for (var i = 0; i < provinceJson.features.length; i++) {
-            data.push({
-              name: provinceJson.features[i].properties.name,
-              value: (Math.random() * 350).toFixed(0)
-            });
-          }
-
-          const option = {
-            title: {
-              text: province + '地区AQI分布云图'
-            },
-            visualMap: {
-              min: 0,
-              max: 350,
-              left: 'right',
-              top: 'center',
-              text: ['350', '0'],
-              calculable: false,
-              color: ['#7cb5ec', '#ffffff']
-            },
-            series: [{
-              type: 'map',
-              mapType: province,
-              label: {
-                normal: {
-                  show: false
-                },
-                emphasis: {
-                  textStyle: {
-                    color: '#000'
-                  }
-                }
-              },
-              itemStyle: {
-                normal: {
-                  borderColor: 'gray',
-                  areaColor: '#fff',
-                },
-                emphasis: {
-                  areaColor: '#f7a35c',
-                  borderWidth: 0
-                }
-              },
-              animation: true,
-              data: data
-            }]
-          };
-          chart.setOption(option);
-          return chart;
+    var provinceJson = wx.getStorageSync('map-data-' + province);
+    function plot(){
+      canvasId.init((canvas, width, height) => {
+        const chart = echarts.init(canvas, null, {
+          width: width,
+          height: height
         });
-      }
-    });
+        echarts.registerMap(province, provinceJson);
 
+        var data = [];
+        for (var i = 0; i < provinceJson.features.length; i++) {
+          data.push({
+            name: provinceJson.features[i].properties.name,
+            value: (Math.random() * 350).toFixed(0)
+          });
+        }
 
-    
+        const option = {
+          /*
+          title: {
+            text: province + '地区AQI分布云图'
+          },
+          */
+          visualMap: {
+            min: 0,
+            max: 350,
+            left: 'right',
+            top: 'center',
+            text: ['350', '0'],
+            calculable: false,
+            color: ['#7cb5ec', '#ffffff']
+          },
+          series: [{
+            type: 'map',
+            mapType: province,
+            label: {
+              normal: {
+                show: false
+              },
+              emphasis: {
+                textStyle: {
+                  color: '#000'
+                }
+              }
+            },
+            itemStyle: {
+              normal: {
+                borderColor: 'gray',
+                areaColor: '#fff',
+              },
+              emphasis: {
+                areaColor: '#f7a35c',
+                borderWidth: 0
+              }
+            },
+            animation: true,
+            data: data
+          }]
+        };
+        chart.setOption(option);
+        return chart;
+      });
+    };
+
+    if (!provinceJson){
+      wx.request({
+        url: 'https://www.wujingair.com/map_data/' + pinyinUtil.provc2py(province) + '.json',
+        method: 'GET',
+        dataType: 'json',
+        success: function (res) {
+          provinceJson = res.data;
+          wx.setStorage({
+            key: 'map-data-' + province,
+            data: provinceJson,
+          });
+          plot();
+        }
+      });
+    }else{
+      plot();
+    }  
   }
 
 });

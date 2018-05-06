@@ -6,8 +6,10 @@
       <swiper-item>
         <view class="swiper-box">
           <view class="Loc-label">
-            <image class="Loc-label Loc-icon" src="../../src/button-icon/Location.png" mode="aspectFill"></image>
-            <view class="Loc-label Loc-value">{{item.Loc}}</view>
+            <view class="Loc-label Loc-value">
+              <image class="Loc-label Loc-icon" src="../../src/button-icon/Location.png" mode="aspectFill" />
+              {{item.Province+', '+item.City}}
+            </view>
           </view>
           <view class="AQI-label">AQI 指数</view>
           <view class="AQI-label AQI-value {{item.AQI>250?'higherAQI':''}} {{item.AQI>150&&item.AQI<=250?'highAQI':''}}">{{item.AQI}}</view>
@@ -24,22 +26,22 @@
 
 <view class="setting-menu {{settingMenuShown ? '' : 'setting-menu-show'}}" bindtouchstart="touchStart_Menu" bindtouchmove="touchMove_Menu" bindtouchend="touchEnd_Menu">
   <view class='setting-menu-tophalf'>
-    <image class="setting-menu-icon" style="background-color:{{airData[current].systemOn?bgColor:'gray'}};" src="../../src/button-icon/Power.png" mode="widthFix" bindtap='onSystemSwitchChanged'></image>
-    <image class="setting-menu-icon" style="background-color:{{airData[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/AutoMode.png" mode="widthFix" bindtap='onAutomodeSwitchChanged'></image>
+    <image class="setting-menu-icon" style="background-color:{{airState[current].systemOn?bgColor:'gray'}};" src="../../src/button-icon/Power.png" mode="widthFix" bindtap='onSystemSwitchChanged'></image>
+    <image class="setting-menu-icon" style="background-color:{{airState[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/AutoMode.png" mode="widthFix" bindtap='onAutomodeSwitchChanged'></image>
     <image class="setting-menu-icon" style="background-color:{{bgColor}};" src="../../src/button-icon/Details.png" mode="widthFix" bindtap='openDetailsPage'></image>
   </view>
   <view class='setting-menu-bottomhalf'>
-    <view style="display:flex;align-items:center;margin:0 8%;color:{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}};">
-      <image class="setting-menu-icon-mini" style="background-color:{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/WindLevel.png" mode="widthFix"/>
-      风速调节: {{airData[current].windlevel}}%
+    <view style="display:flex;align-items:center;margin:0 8%;color:{{airState[current].systemOn&&!airState[current].automodeOn?bgColor:'gray'}};">
+      <image class="setting-menu-icon-mini" style="background-color:{{airState[current].systemOn&&!airState[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/WindLevel.png" mode="widthFix"/>
+      风速调节: {{airState[current].windlevel}}%
     </view>
-    <slider block-size="20" style='margin:0 8%;' disabled="{{!(airData[current].systemOn&&!airData[current].automodeOn)}}" activeColor="{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}}" backgroundColor="{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}}" value='{{airData[current].windlevel}}' bindchange='onWindlevelChanged'></slider>
+    <slider block-size="20" style='margin:0 8%;' disabled="{{!(airState[current].systemOn&&!airState[current].automodeOn)}}" activeColor="{{airState[current].systemOn&&!airState[current].automodeOn?bgColor:'gray'}}" backgroundColor="{{airState[current].systemOn&&!airState[current].automodeOn?bgColor:'gray'}}" value='{{airState[current].windlevel}}' bindchange='onWindlevelChanged'></slider>
   </view>
   <view class='setting-menu-bottomhalf'>
-    <view style="display:flex;align-items:center;margin:0 8%;color:{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}};">
-      <image class="setting-menu-icon-mini" style="background-color:{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/OxygenLevel.png" mode="widthFix"/>
-      负氧离子调节: {{airData[current].oxygenlevel}}%
+    <view style="display:flex;align-items:center;margin:0 8%;color:{{airState[current].systemOn&&!airState[current].automodeOn?bgColor:'gray'}};">
+      <image class="setting-menu-icon-mini" style="background-color:{{airState[current].systemOn&&!airState[current].automodeOn?bgColor:'gray'}};" src="../../src/button-icon/OxygenLevel.png" mode="widthFix"/>
+      负氧离子调节: {{airState[current].oxygenlevel}}%
     </view>
-    <slider block-size="20" style='margin:0 8%;' disabled="{{!(airData[current].systemOn&&!airData[current].automodeOn)}}" activeColor="{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}}" backgroundColor="{{airData[current].systemOn&&!airData[current].automodeOn?bgColor:'gray'}}" value='{{airData[current].oxygenlevel}}' bindchange='onOxygenlevelChanged'></slider>
+    <slider block-size="20" style='margin:0 8%;' disabled="{{!(airState[current].systemOn&&!airState[current].automodeOn)}}" activeColor="{{airState[current].systemOn&&!airState[current].automodeOn?bgColor:'gray'}}" backgroundColor="{{airState[current].systemOn&&!airState[current].automodeOn?bgColor:'gray'}}" value='{{airState[current].oxygenlevel}}' bindchange='onOxygenlevelChanged'></slider>
   </view>
 </view>

@@ -2,15 +2,21 @@
 @import "../../ripples.wxss";
 
 .bgcover {
-  height: 100%; 
-  width: 100%; 
+  width: 100%;
+  position: fixed;
+  z-index: -1;
+  background: #fff;
+  /*
   overflow: hidden;
   display: flex; 
   flex-direction: column;
+  */
   justify-content: center;
+  /*
   box-sizing: border-box;
   -webkit-text-size-adjust:none;
   -webkit-user-select: none;
+  */
   font-size: 35rpx;
   color: #333;
   font-family: Helvetica,Arial,"Helvetica Neue","Droid Sans","Microsoft YaHei",sans-serif;
@@ -22,6 +28,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  background: #fff;
 }
 .weather-icon {
   width: 30%;
@@ -75,10 +82,9 @@
 
 .echarts-container {
   width: 80%;
-  height: 64%;
   position: absolute;
-  top: 30.5%;
-  bottom: 2.5%;
+  top: 25%;
+  bottom: 2%;
   left: 10%;
   right: 10%;
   display: flex;
@@ -86,24 +92,114 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  z-index: 999;
+  z-index: 1;
   background: #fff;
 } 
-#echart-top {
-  position: absolute;
+#label0 {
+  position: absolute;  
+  z-index: 2;
+  height: 24rpx;
   top: 0;
-  bottom: 50%;
   left: 0;
   right: 0;
-  z-index: 999;
   background: #fff;
 }
-#echart-bottom {
-  position: absolute;
-  top: 50%;
-  bottom: 0;
+#chart0 {
+  position: absolute;  
+  z-index: 1;
+  height: 512rpx;
+  top: 24rpx;
   left: 0;
   right: 0;
-  z-index: 999;
+  background: #fff;
+}
+#label1 {
+  position: absolute;  
+  z-index: 2;
+  height: 24rpx;
+  top: 536rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#chart1 {
+  position: absolute;
+  z-index: 1;
+  height: 512rpx;
+  top: 560rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#label2 {
+  position: absolute;  
+  z-index: 2;
+  height: 24rpx;
+  top: 1072rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#chart2 {
+  position: absolute;
+  z-index: 1;
+  height: 512rpx;
+  top: 1096rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#label3 {
+  position: absolute;  
+  z-index: 2;
+  height: 24rpx;
+  top: 1608rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#chart3 {
+  position: absolute;
+  z-index: 1;
+  height: 512rpx;
+  top: 1632rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#label4 {
+  position: absolute;  
+  z-index: 2;
+  height: 24rpx;
+  top: 2144rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#chart4 {
+  position: absolute;
+  z-index: 1;
+  height: 512rpx;
+  top: 2168rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#label5 {
+  position: absolute;  
+  z-index: 2;
+  height: 24rpx;
+  top: 2680rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+#chart5 {
+  position: absolute;
+  z-index: 1;
+  height: 512rpx;
+  top: 2704rpx;
+  left: 0;
+  right: 0;
   background: #fff;
 }
