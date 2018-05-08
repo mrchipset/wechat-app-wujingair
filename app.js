@@ -5,7 +5,6 @@ App({
     windowSize: [],
     socketConnected: false
   },
-
   onLaunch: function () {
     const that = this;
     wx.login({
@@ -23,5 +22,4 @@ App({
       }
     });
   }
-  
 })
