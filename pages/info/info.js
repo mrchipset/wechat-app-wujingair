@@ -96,12 +96,12 @@ Page({
     var airData = that.data.airData;
 
     that.chart0 = that.selectComponent('#chart0');
-    var concentsChart = that.plotConcents(that.chart0, airData);
+    that.plotConcents(that.chart0, airData, true);
     setInterval(function () {
       airData = wx.getStorageSync('airData');
       airData = airData[that.data.index];
-      that.plotConcents(that.chart0, airData);
-    }, 5000);
+      that.plotConcents(that.chart0, airData, false);
+    }, 3000);
 
     that.chart1 = that.selectComponent('#chart1');
     that.plotDailyChange(that.chart1, airData);
@@ -125,7 +125,7 @@ Page({
   },
 
 
-  plotConcents: function (canvasId, airData) {
+  plotConcents: function (canvasId, airData, animation) {
     const that = this;
     canvasId.init((canvas, width, height) => {
       const chart = echarts.init(canvas, null, {
@@ -134,6 +134,7 @@ Page({
       });
 
       var option = {
+        animation: animation,
         color: ['#7cb5ec', '#f7a35c', '#434348', '#90ed7d'],
         /*
         title: {

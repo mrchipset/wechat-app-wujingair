@@ -254,15 +254,15 @@ Page({
         }
         */
       }else{
-        if(res.pm1){
+        if(res.pm2){
           airData[0].Concent = [
-            res.voc,
-            res.pm1,
-            res.pm2,
-            res.pm10
+            res.voc.toFixed(3),
+            res.pm1.toFixed(1),
+            res.pm2.toFixed(1),
+            res.pm10.toFixed(1)
           ];
-          airData[0].Tem = res.tem;
-          airData[0].Hum = res.hum;
+          airData[0].Tem = res.tem.toFixed(1);
+          airData[0].Hum = res.hum.toFixed(1);
         }
       }
       that.setData({

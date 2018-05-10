@@ -74,17 +74,47 @@
   */
 }
 
+/*
+.AQI-box{
+  width: 512rpx;
+  height: 512rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://www.wujingair.com/fs/CleanerOn.gif');
+  background-repeat: no-repeat;
+  background-size: 512rpx;
+}
+*/
+.AQI-box{
+  width: 560rpx;
+  height: 560rpx;
+  margin-top: -100rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-size: 560rpx;
+}
+.AQI-box-bg-on{
+  background-image: url('https://www.wujingair.com/fs/CleanerOn.gif');
+}
+.AQI-box-bg-off{
+  background-image: url('https://www.wujingair.com/fs/CleanerOff.gif');
+}
+
 .AQI-label {
   width: 100%;
   display: flex;
   justify-content: center;
   color: #fff;
-  font-size: 48rpx;
+  font-size: 36rpx;
 }
-.AQI-label.AQI-value {
+.AQI-value {
+  width: fit-content;
+  justify-content: center;
   font-size: 128rpx;
   font-weight: lighter;
-  margin-bottom: 16rpx;
+  margin: 0 auto;
 }
 
 .chart-box {

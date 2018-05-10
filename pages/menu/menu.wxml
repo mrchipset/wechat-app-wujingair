@@ -11,8 +11,10 @@
               {{item.Province+', '+item.City}}
             </view>
           </view>
-          <view class="AQI-label">AQI 指数</view>
-          <view class="AQI-label AQI-value {{item.AQI>250?'higherAQI':''}} {{item.AQI>150&&item.AQI<=250?'highAQI':''}}">{{item.AQI}}</view>
+          <view class="AQI-box {{airState[current].systemOn?'AQI-box-bg-on':'AQI-box-bg-off'}}">
+            <view class="AQI-label">AQI 指数</view>
+            <view class="AQI-label AQI-value {{item.AQI>250?'higherAQI':''}} {{item.AQI>150&&item.AQI<=250?'highAQI':''}}">{{item.AQI}}</view>
+          </view>
         </view>
       </swiper-item>
     </block>
