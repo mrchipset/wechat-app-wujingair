@@ -6,7 +6,6 @@ App({
     socketConnected: false,
     mapData: []
   },
-
   onLaunch: function () {
     const that = this;
     wx.login({
@@ -25,5 +24,4 @@ App({
     });
 
   }
-  
 })
