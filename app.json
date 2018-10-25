@@ -2,12 +2,14 @@
   "pages": [
     "pages/menu/menu",
     "pages/info/info",
-    "pages/add/add"
+    "pages/add/add",
+    "pages/map/map",
+    "pages/arcam/arcam"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "悟静空气净化器",
+    "navigationBarTitleText": "悟净空气管理系统",
     "navigationBarTextStyle": "black"
   }
 }

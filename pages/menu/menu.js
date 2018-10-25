@@ -177,7 +177,7 @@ Page({
 
 
   startSocket: function () {
-    const wssUrl = 'wss://www.wujingair.com/wss';
+    const wssUrl = 'wss://gypsophilla.sorahjy.com/wss';
     const that = this;
     var airData = that.data.airData;
     function handleData(arr) {

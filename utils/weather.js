@@ -3,12 +3,12 @@ const apiKey = "f2f456df296c41ddaf3e1742468f0dbf";
 
 //get AQI
 function getAQI(provc, city, callback){
-  var apiUrl = 'https://www.wujingair.com/getaqi.php?id=' + city;
+  var apiUrl = 'https://gypsophilla.sorahjy.com/getaqi.php?id=' + city;
   wx.request({
     url: apiUrl,
     success: function (res) {
       if(!res.data.aqi){
-        apiUrl = 'https://www.wujingair.com/getaqi.php?id=' + provc;
+        apiUrl = 'https://gypsophilla.sorahjy.com/getaqi.php?id=' + provc;
         wx.request({
           url: apiUrl,
           success: function(res){

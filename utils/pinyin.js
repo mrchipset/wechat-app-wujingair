@@ -39,7 +39,7 @@ function provc2py(provc) {
 }
 
 function str2py(str, callback){
-  const apiUrl = "https://www.wujingair.com/getpinyin.php?s=" + str;
+  const apiUrl = "https://gypsophilla.sorahjy.com/getpinyin.php?s=" + str;
   wx.request({
     url: apiUrl,
     success: function(res){

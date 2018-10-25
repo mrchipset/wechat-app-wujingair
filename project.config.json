@@ -33,7 +33,7 @@
 				{
 					"id": 0,
 					"name": "test-page",
-					"pathName": "pages/multiCharts/index",
+					"pathName": "pages/map/map",
 					"query": ""
 				}
 			]

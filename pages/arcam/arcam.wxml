@@ -1,0 +1,2 @@
+<camera id="cam" style="height:{{windowSize[0]}}px;" device-position="back"></camera>
+<view class="label" style="top:{{windowSize[1]/2}}px;">{{test}}</view>

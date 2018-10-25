@@ -81,7 +81,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('https://www.wujingair.com/fs/CleanerOn.gif');
+  background-image: url('https://gypsophilla.sorahjy.com/fs/CleanerOn.gif');
   background-repeat: no-repeat;
   background-size: 512rpx;
 }
@@ -96,10 +96,10 @@
   background-size: 560rpx;
 }
 .AQI-box-bg-on{
-  background-image: url('https://www.wujingair.com/fs/CleanerOn.gif');
+  background-image: url('https://gypsophilla.sorahjy.com/fs/CleanerOn.gif');
 }
 .AQI-box-bg-off{
-  background-image: url('https://www.wujingair.com/fs/CleanerOff.gif');
+  background-image: url('https://gypsophilla.sorahjy.com/fs/CleanerOff.gif');
 }
 
 .AQI-label {

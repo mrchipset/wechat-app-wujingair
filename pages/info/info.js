@@ -684,7 +684,7 @@ Page({
 
     if (!provinceJson){
       wx.request({
-        url: 'https://www.wujingair.com/map_data/' + pinyinUtil.provc2py(province) + '.json',
+        url: 'https://gypsophilla.sorahjy.com/map_data/' + pinyinUtil.provc2py(province) + '.json',
         method: 'GET',
         dataType: 'json',
         success: function (res) {
